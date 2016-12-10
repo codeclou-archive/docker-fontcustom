@@ -3,6 +3,7 @@ FROM ubuntu:16.04
 #
 # PACKAGES
 #
+RUN apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
 RUN sudo apt-get update
 RUN sudo apt-get -y install ruby fontforge
 RUN wget http://repo.codeclou.io/bin/woff-code-latest.zip
