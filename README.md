@@ -10,10 +10,10 @@ If your svgs reside inside `myfont/*.svg` you can create an icon font with:
 
 ```
 cd myfont
-docker run 
-    --tty 
-    --volume $(pwd)/:/fonts/ 
-codeclou/docker-fontcustom:latest fontcustom compile
+docker run \
+    --tty \
+    --volume $(pwd)/:/fonts/ \
+    codeclou/docker-fontcustom:latest fontcustom compile
 ```
 
 ----
