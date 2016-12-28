@@ -4,6 +4,8 @@ Docker Image to work with [fontcustom](https://github.com/FontCustom/fontcustom)
 
 ![](https://codeclou.github.io/doc/docker-warranty.svg?v5)
 
+-----
+
 ### Usage
 
 If your svgs reside inside `myfont/*.svg` you can create an icon font with:
@@ -17,7 +19,6 @@ docker run \
 ```
 
 ----
-
 
 ### License
 
