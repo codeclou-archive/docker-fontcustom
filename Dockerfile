@@ -3,18 +3,24 @@ FROM ubuntu:16.04
 #
 # PACKAGES
 #
-RUN apt-get update && apt-get install -y sudo && rm -rf /var/lib/apt/lists/*
-RUN sudo apt-get update
-RUN sudo apt-get -y install ruby ruby-dev fontforge wget build-essential zlib1g-dev
-RUN wget http://repo.codeclou.io/bin/woff-code-latest.zip && unzip woff-code-latest.zip -d sfnt2woff && cd sfnt2woff && make && sudo mv sfnt2woff /usr/local/bin/
-RUN gem install fontcustom
-
-
-RUN mkdir /fonts/
-WORKDIR /fonts/
+ENV FONTCUSOM_VERSION 1.3.8
+COPY lib/woff-code-latest.zip /rubyapp/woff-code-latest.zip
+COPY docker-entrypoint.sh /opt/docker-entrypoint.sh
+RUN apt-get update && \
+    apt-get -y install ruby ruby-dev fontforge wget build-essential zlib1g-dev unzip && \
+    unzip /rubyapp/woff-code-latest.zip -d /rubyapp/sfnt2woff && \
+    cd /rubyapp/sfnt2woff && make && mv sfnt2woff /usr/local/bin/ && \
+    gem install --no-document fontcustom -v "${FONTCUSOM_VERSION}" && \
+    addgroup --gid 10777 rubyworker && \
+    adduser --uid 10777 --gid 10777 --no-create-home --disabled-password --disabled-login --gecos "" rubyworker && \
+    mkdir -p /rubyapp/fonts/ && \
+    chown -R rubyworker:rubyworker /rubyapp/ && \
+    chmod u+rx,g+rx,o+rx,a-w /opt/docker-entrypoint.sh
 
 #
-# WILL BE OVERWRITTEN
+# RUN
 #
-CMD fontcustom help
-
+USER rubyworker
+WORKDIR /rubyapp/fonts/
+ENTRYPOINT ["/opt/docker-entrypoint.sh"]
+CMD ["fontcustom", "help"]
